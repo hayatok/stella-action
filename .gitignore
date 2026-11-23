@@ -2,3 +2,5 @@ node_modules/
 dist/
 .DS_Store
 research_ref/
+assets/compare_*.png
+assets/source/*.blend1
