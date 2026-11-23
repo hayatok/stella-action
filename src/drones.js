@@ -78,14 +78,14 @@ export function createDrones(scene) {
       offset.subVectors(drone.group.position, position);
       if (Math.abs(offset.y - 0.85) > 1.15) continue;
       offset.y = 0;
-      if (offset.lengthSq() > 2.2 ** 2 || offset.normalize().dot(facing) < Math.cos(Math.PI / 4)) {
+      if (offset.lengthSq() > 2.6 ** 2 || offset.normalize().dot(facing) < Math.cos(Math.PI / 4)) {
         continue;
       }
       hits++;
       drone.hp--;
       drone.flash = 0.22;
       drone.material.emissive.setHex(0xffffff);
-      drone.velocity.copy(offset).multiplyScalar(3.5);
+      drone.velocity.copy(offset).multiplyScalar(2.1);
       const defeated = drone.hp === 0;
       burst(drone.group.position, defeated ? 24 : 8);
       if (defeated) {

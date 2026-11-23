@@ -17,7 +17,7 @@ body { margin: 0; overflow: hidden; }
 }
 
 canvas { display: block; }
-#hud, #controls {
+#hud, #controls, #debug-state {
   position: absolute;
   z-index: 1;
   pointer-events: none;
@@ -25,6 +25,14 @@ canvas { display: block; }
 }
 
 #hud { top: 1rem; left: 1rem; }
+#debug-state {
+  top: .25rem;
+  right: .75rem;
+  z-index: 4;
+  margin: 0;
+  font: .7rem monospace;
+  opacity: .8;
+}
 h1 { margin: 0; font-size: 1.2rem; }
 #hud p { margin: .35rem 0 0; }
 #fallback { font-size: .8rem; }

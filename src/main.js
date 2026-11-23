@@ -87,6 +87,7 @@ const cameraTarget = new THREE.Vector3();
 const follow = new THREE.Vector3();
 const cameraOffset = new THREE.Vector3();
 const progress = document.querySelector('#progress');
+const debugState = document.querySelector('#debug-state');
 const clear = document.querySelector('#clear');
 const restartButton = document.querySelector('#restart');
 
@@ -94,7 +95,7 @@ const input = createInput(renderer.domElement, (dx, dy) => {
   orbitYaw -= dx * 0.008;
   pitch = THREE.MathUtils.clamp(pitch + dy * 0.006, 0.16, 1.02);
 }, () => {
-  if (!cleared && !swing && player.position.y === 0) verticalSpeed = 7;
+  if (!cleared && !swing && player.position.y === 0) verticalSpeed = 8.5;
 }, () => {
   if (cleared) return;
   if (!swing) {
@@ -180,7 +181,7 @@ function updatePlayer(dt) {
   }
   if (verticalSpeed !== 0 || player.position.y > 0) {
     player.position.y = Math.max(0, player.position.y + verticalSpeed * dt);
-    verticalSpeed = player.position.y > 0 ? verticalSpeed - 19 * dt : 0;
+    verticalSpeed = player.position.y > 0 ? verticalSpeed - 16 * dt : 0;
   }
   animate(swing ? 'Attack' : player.position.y > 0 ? 'Jump' : speed > 0 ? 'Run' : 'Idle');
   if (characterState === 'Run') animation?.setEffectiveTimeScale(speed / WALK_SPEED);
@@ -237,5 +238,7 @@ renderer.setAnimationLoop((now) => {
     }
   }
   updateCamera(Math.min(elapsed, 0.05));
+  const stateLabel = `STATE: ${characterState} / ${player.position.y > 0 ? 'AIR' : 'GROUND'}`;
+  if (debugState.textContent !== stateLabel) debugState.textContent = stateLabel;
   renderer.render(scene, camera);
 });
