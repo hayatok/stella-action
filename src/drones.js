@@ -78,7 +78,7 @@ export function createDrones(scene) {
       offset.subVectors(drone.group.position, position);
       if (Math.abs(offset.y - 0.85) > 1.15) continue;
       offset.y = 0;
-      if (offset.lengthSq() > 2.6 ** 2 || offset.normalize().dot(facing) < Math.cos(Math.PI / 4)) {
+      if (offset.lengthSq() > 2.6 ** 2 || offset.normalize().dot(facing) < Math.cos(Math.PI / 3)) {
         continue;
       }
       hits++;
@@ -105,6 +105,14 @@ export function createDrones(scene) {
       const { group, velocity } = drone;
       group.position.addScaledVector(velocity, dt).clampLength(0, RADIUS - 1);
       velocity.multiplyScalar(Math.exp(-9 * dt));
+      const homeX = drone.x - group.position.x;
+      const homeZ = drone.z - group.position.z;
+      const distanceFromHome = Math.hypot(homeX, homeZ);
+      if (distanceFromHome > 0.5) {
+        const fraction = Math.min(0.8 * dt, distanceFromHome - 0.5) / distanceFromHome;
+        group.position.x += homeX * fraction;
+        group.position.z += homeZ * fraction;
+      }
       group.position.y = 0.95 + Math.sin(elapsed * 3 + drone.index) * 0.16;
       group.rotation.y = Math.atan2(playerPosition.x - group.position.x, playerPosition.z - group.position.z);
       drone.flash = Math.max(0, drone.flash - dt);

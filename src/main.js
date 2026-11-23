@@ -146,7 +146,7 @@ function updatePlayer(dt) {
     swing.age += dt;
     const stepTime = Math.min(swing.age, HIT_TIME) - Math.min(previousAge, HIT_TIME);
     motion.set(Math.sin(yaw), 0, Math.cos(yaw));
-    player.position.addScaledVector(motion, stepTime * (0.68 / HIT_TIME));
+    player.position.addScaledVector(motion, stepTime * (0.35 / HIT_TIME));
     if (previousAge < HIT_TIME && swing.age >= HIT_TIME && drones.hit(player.position, yaw)) {
       hitstop = 0.06;
       updateProgress();
