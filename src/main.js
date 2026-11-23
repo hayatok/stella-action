@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { addArena, RADIUS } from './arena.js';
 import { createDrones } from './drones.js';
 import { createInput } from './input.js';
+import { gradientMap } from './toon.js';
 import './style.css';
 
 const WALK_SPEED = 5;
@@ -56,8 +57,30 @@ new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}models/stella.glb`).then(
     }
     actions.set(name, action);
   }
+  const toonMaterials = new Map();
+  function toToon(material) {
+    if (!material.isMeshStandardMaterial) return material;
+    if (!toonMaterials.has(material)) {
+      toonMaterials.set(material, new THREE.MeshToonMaterial({
+        gradientMap,
+        map: material.map,
+        color: material.color,
+        emissive: material.emissive,
+        emissiveMap: material.emissiveMap,
+        emissiveIntensity: material.emissiveIntensity,
+        transparent: material.transparent,
+        opacity: material.opacity,
+        side: material.side,
+      }));
+    }
+    return toonMaterials.get(material);
+  }
   gltf.scene.traverse((node) => {
-    if (node.isMesh) node.castShadow = true;
+    if (!node.isMesh) return;
+    node.castShadow = true;
+    node.material = Array.isArray(node.material)
+      ? node.material.map(toToon)
+      : toToon(node.material);
   });
   // Player movement and the authored model both face local +Z.
   player.add(gltf.scene);

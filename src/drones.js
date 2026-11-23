@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RADIUS } from './arena.js';
+import { gradientMap } from './toon.js';
 
 export function createDrones(scene) {
   const hull = new THREE.SphereGeometry(0.56, 16, 12);
@@ -28,8 +29,8 @@ export function createDrones(scene) {
   const shards = [];
   const drones = [[0, 5], [-5, 10], [6, 10]].map(([x, z], index) => {
     const group = new THREE.Group();
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x524574, metalness: 0.35, roughness: 0.35,
+    const material = new THREE.MeshToonMaterial({
+      color: 0x524574, gradientMap,
     });
     const shell = new THREE.Mesh(hull, material);
     shell.scale.y = 0.68;
